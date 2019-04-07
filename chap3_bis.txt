@@ -1,0 +1,48 @@
+>>> import pandas as pd 
+>>> from sqlalchemy import create_engine 
+>>> engine = create_engine('sqlite:///Northwind.sl3') 
+>>> table_obj = engine.table_names()  
+>>> print(table_obj) 
+[u'Categories', u'CustomerCustomerDemo', u'CustomerDemographics', u'Customers', u'EmployeeTerritories', u'Employees', u'Order Details', u'Orders', u'Products', u'Region', u'Shippers', u'Suppliers', u'Territories'] 
+>>> con = engine.connect() 
+>>> rs = con.execute("SELECT * FROM 'Order Details'") 
+>>> data = pd.DataFrame(rs.fetchall()) 
+>>> data.columns = rs.keys() 
+>>> data.head() 
+
+>>> import pandas as pd 
+>>> from sqlalchemy import create_engine 
+>>> engine = create_engine('sqlite:///Chinook.sqlite') 
+>>> table_obj = engine.table_names() 
+>>> print(table_obj) 
+[u'Album', u'Artist', u'Customer', u'Employee', u'Genre', u'Invoice', u'InvoiceLine', u'MediaType', u'Playlist', u'PlaylistTrack', u'Track']
+>>> con = engine.connect() 
+>>> rs = con.execute("SELECT * FROM Employee") 
+>>> data = pd.DataFrame(rs.fetchall()) 
+>>> data.columns = rs.keys() 
+>>> data.head() 
+               
+>>> engine = create_engine('sqlite:///Chinook.sqlite') 
+>>> table_obj = engine.table_names() 
+>>> print(table_obj) 
+>>> data = pd.read_sql_query("SELECT * FROM Album", engine) 
+>>> data.head() 
+>>> con = engine.connect() 
+>>> rs = con.execute("SELECT * FROM Album") 
+>>> data2 = pd.DataFrame(rs.fetchall()) 
+>>> data2.columns = rs.keys() 
+>>> print(data.equals(data2)) 
+
+
+>>> engine = create_engine('sqlite:///Chinook.sqlite') 
+>>> con = engine.connect() 
+>>> tabl_obj = engine.table_names() 
+>>> print(tabl_obj) 
+[u'Album', u'Artist', u'Customer', u'Employee', u'Genre', u'Invoice', u'InvoiceLine', u'MediaType', u'Playlist', u'PlaylistTrack', u'Track']
+>>> data = pd.read_sql_query("SELECT Title, Name FROM Album INNER JOIN Artist on Album.ArtistId = Artist.ArtistId", engine)
+>>> data.head() 
+>>> data.loc[0:30, ['Title','Name']] 
+
+>>> data = pd.read_sql_query("SELECT * FROM PlaylistTrack INNER JOIN Track ON PlaylistTrack.TrackId = Track.TrackId WHERE Milliseconds < 350000", engine) 
+>>> data.head() 
+
